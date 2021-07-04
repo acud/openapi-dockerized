@@ -1,0 +1,12 @@
+name: 'OpenAPI Skeg'
+description: 'Builds OpenAPI specs and pushes them to your favorite S3 compatible API (e.g. DigitalOcean Spaces, AWS S3, etc)'
+inputs:
+  build-roots:
+    description: "A space delimited array of OpenAPI spec roots that would build into separate html files (e.g. '<specdir>/API.yaml <specdir>/AnotherAPI.yaml')"
+    required: true
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.build-roots }}
