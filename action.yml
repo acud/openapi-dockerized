@@ -1,4 +1,4 @@
-name: 'OpenAPI Skeg'
+name: 'OpenAPI Dockerized'
 description: 'Builds OpenAPI specs and pushes them to your favorite S3 compatible API (e.g. DigitalOcean Spaces, AWS S3, etc)'
 inputs:
   build-roots:
@@ -7,6 +7,6 @@ inputs:
     default: ''
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://stolen/openapi-dockerized:latest'
   args:
     - ${{ inputs.build-roots }}
