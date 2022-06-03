@@ -5,6 +5,9 @@ inputs:
     description: "A space delimited array of OpenAPI spec roots that would build into separate html files (e.g. '<specdir>/API.yaml <specdir>/AnotherAPI.yaml')"
     required: true
     default: ''
+outputs:
+  urls:
+    description: "A space delimited list of URLs of the build&uploaded OpenAPI specs
 runs:
   using: 'docker'
   image: 'docker://stolen/openapi-dockerized:latest'
