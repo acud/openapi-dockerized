@@ -3,6 +3,7 @@ set -e
 
 echo "Building some OpenAPI specs for you..."
 vertag=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 30)
+outputUrls=""
 
 aws_endpoint=$AWS_ENDPOINT
 if [ $aws_endpoint != http* ]
@@ -16,10 +17,11 @@ for i in $files
 do
   outfname=${GITHUB_WORKSPACE}/${i}_${vertag}.html
   fname=$(basename $outfname)
-  npx redoc-cli bundle $GITHUB_WORKSPACE/$i -o $outfname --disableGoogleFont --options.expandDefaultServerVariables "true" 
+  npx redoc-cli bundle $GITHUB_WORKSPACE/$i -o $outfname --disableGoogleFont --options.expandDefaultServerVariables "true"
   aws --endpoint-url $aws_endpoint s3 cp $outfname s3://$BUCKET_NAME/
   aws --endpoint-url $aws_endpoint s3api put-object-acl --bucket $BUCKET_NAME --acl public-read --key $fname
   out="== Uploaded spec successfully to https://${BUCKET_NAME}.${AWS_ENDPOINT}/$fname =="
+  outputUrls+="https://${BUCKET_NAME}.${AWS_ENDPOINT}/$fname "
   ln=${#out}
   while [ $ln -gt 0 ]; do printf '=%.0s'; ((ln--));done;
   echo ""
@@ -28,3 +30,8 @@ do
   while [ $ln -gt 0 ]; do printf '=%.0s'; ((ln--));done;
   echo ""
 done
+
+# Set the Github Action's output
+if [ -n "$outputUrls" ]; then
+  echo "::set-output name=urls::${outputUrls; ${#outputUrls}-1}"
+fi
