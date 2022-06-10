@@ -33,5 +33,5 @@ done
 
 # Set the Github Action's output
 if [ -n "$outputUrls" ]; then
-  echo "::set-output name=urls::${outputUrls; ${#outputUrls}-1}"
+  echo "::set-output name=urls::${outputUrls::$((${#outputUrls}-1))}"
 fi
